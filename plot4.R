@@ -2,17 +2,22 @@
 ## Project 1 Script
 
 ## Plot 4 script
+## I took the approach of downloading the opriginal zip file, manipulating the data  for plotting purposes and 
+## prepariing both a screen plot and writing the duplicate file to a png file using a duplication of the code 
+## rather than dev.copy
+
+plot4 <- function() {
 
 require(data.table)
 require(lubridate)
 require(dplyr)
 
-setwd("C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/Project 1")
+setwd("C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1")
 
-## figure out how to make fread read in only certain observations (from the data.table package)
-##  power <- fread("household_power_consumption.txt", sep = ";", header = TRUE)
-
-power_raw <- read.table("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE)
+temp <- tempfile()
+download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip",temp)
+power_raw <- read.table((unz(temp,"household_power_consumption.txt")), sep = ";", header = TRUE, stringsAsFactors = FALSE)
+unlink(temp)
 
 power_one <- tbl_df(power_raw)
 power_one$Date <- dmy(power_one$Date)
@@ -22,34 +27,50 @@ power$Sub_metering_1 <- as.numeric(power$Sub_metering_1)
 power$Sub_metering_2 <- as.numeric(power$Sub_metering_2)
 power$Sub_metering_3 <- as.numeric(power$Sub_metering_3)
 
-power$dateTime <- ymd_hms(paste(power$Date, power$Time, sep = " "))
+power$dateTime <- ymd_hms(paste(power$Date, power$Time, sep = " "))  ## concatenate Date and Time into a single field for line plots
 
-windows()
+windows()  ## open the screen device
 
-par(mfrow = c(2, 2))
-mar = c(4, 4, 3, 1)
+par(mfrow = c(2, 2))  ## set parameters for the 2 x 2 plots
+mar = c(2, 1.5, 1, 1)
 
 with(power, {
   plot(dateTime, Global_active_power, type = "l", xlab = "")
-
   plot(dateTime, Voltage, type = "l", xlab = "datetime")
-
   plot(power$dateTime, power$Sub_metering_1, type = "l",                                        
-     ylab = "Energy sub metering",
-     xlab = " ", 
-     mar = c(2, 1, 1, 0.5)
-)
-    lines(power$dateTime,power$Sub_metering_2, lwd=2, col="red")
-    lines(power$dateTime,power$Sub_metering_3, lwd=2, col="blue")
-    legend("topright", bty = "n", legend=c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lwd=c(2,2,2), col=c("black","red","blue"))
-
+       ylab = "Energy sub metering",
+       xlab = " "
+  )
+  lines(power$dateTime,power$Sub_metering_2, lwd=1, col="red")
+  lines(power$dateTime,power$Sub_metering_3, lwd=1, col="blue")
+  legend("topright", bty = "n", legend=c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lwd=c(2,2,2), col=c("black","red","blue"))
+  
   plot(dateTime, Global_reactive_power, type = "l", xlab = "datetime")
 })
 
-## copy the plot to the plot4.png file
+## create the same plot in the plot4.png file
 
-dev.copy(png,filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/Project 1/plot4.png", 
-         width = 480, height = 480)
+png(filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1/plot4.png", 
+    width = 480, height = 480)
+
+par(mfrow = c(2, 2))     ## set parameters for the 2 x 2 plots
+mar = c(2, 1.5, 1, 1)
+bg = NA
+
+with(power, {
+  plot(dateTime, Global_active_power, type = "l", xlab = "") 
+  plot(dateTime, Voltage, type = "l", xlab = "datetime")
+  plot(power$dateTime, power$Sub_metering_1, type = "l",                                        
+       ylab = "Energy sub metering",
+       xlab = " "
+  )
+  lines(power$dateTime,power$Sub_metering_2, lwd=1, col="red")
+  lines(power$dateTime,power$Sub_metering_3, lwd=1, col="blue")
+  legend("topright", bty = "n", legend=c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lwd=c(2,2,2), col=c("black","red","blue"))
+  
+  plot(dateTime, Global_reactive_power, type = "l", xlab = "datetime")
+})
 
 dev.off()   ## Don't forget to close the PNG device!
 
+}

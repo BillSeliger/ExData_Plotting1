@@ -3,17 +3,18 @@
 
 ## Plot 2 script
 
-require(data.table)
-require(lubridate)
-require(dplyr)
-
-setwd("C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/Project 1")
-
-## figure out how to make fread read in only certain observations (from the data.table package)
-##  power <- fread("household_power_consumption.txt", sep = ";", header = TRUE)
-
-power_raw <- read.table("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE)
-
+plot2 <- function() {
+  
+  require(data.table)
+  require(lubridate)
+  require(dplyr)
+  
+  setwd("C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1")
+  
+  temp <- tempfile()
+  download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip",temp)
+  power_raw <- read.table((unz(temp,"household_power_consumption.txt")), sep = ";", header = TRUE, stringsAsFactors = FALSE)
+  unlink(temp)
 power_one <- tbl_df(power_raw)
 power_one$Date <- dmy(power_one$Date)
 power <- subset(power_one, Date >"2007-01-31" & Date < "2007-02-02")
@@ -30,7 +31,8 @@ plot(power$dateTime, power$Global_active_power, type = "l",
 
 ## copy the plot to the plot2.png file
 
-dev.copy(png,filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/Project 1/plot2.png", 
+dev.copy(png,filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1/plot2.png", 
          width = 480, height = 480)
 
 dev.off()  ## Don't forget to close the PNG device!
+}

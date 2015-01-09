@@ -3,17 +3,18 @@
 
 ## Plot 3 script
 
-require(data.table)
-require(lubridate)
-require(dplyr)
-
-setwd("C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/Project 1")
-
-## figure out how to make fread read in only certain observations (from the data.table package)
-##  power <- fread("household_power_consumption.txt", sep = ";", header = TRUE)
-
-power_raw <- read.table("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE)
-
+plot3 <- function() {
+  
+  require(data.table)
+  require(lubridate)
+  require(dplyr)
+  
+  setwd("C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1")
+  
+  temp <- tempfile()
+  download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip",temp)
+  power_raw <- read.table((unz(temp,"household_power_consumption.txt")), sep = ";", header = TRUE, stringsAsFactors = FALSE)
+  unlink(temp)
 power_one <- tbl_df(power_raw)
 power_one$Date <- dmy(power_one$Date)
 power <- subset(power_one, Date >"2007-01-31" & Date < "2007-02-02")
@@ -36,9 +37,21 @@ lines(power$dateTime,power$Sub_metering_2, lwd=2, col="red")
 lines(power$dateTime,power$Sub_metering_3, lwd=2, col="blue")
 legend("topright", bty = "10", legend=c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lwd=c(2,2,2), col=c("black","red","blue"))
 
-## copy the plot to the plot3.png file
+## create the plot in a png file
 
-dev.copy(png, filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/Project 1/plot3.png", 
-         width = 480, height = 480)
+png(filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1/plot3.png", 
+    width = 480, height = 480)
 
-dev.off()   ## Don't forget to close the PNG device!
+plot(power$dateTime, power$Sub_metering_1, type = "l",                                        
+     ylab = "Energy sub metering",
+     xlab = " ", 
+     mar = c(.5, .1, .1, .1),
+     bg = "NA"
+)
+lines(power$dateTime,power$Sub_metering_2, lwd=1, col="red")
+lines(power$dateTime,power$Sub_metering_3, lwd=1, col="blue")
+legend("topright", bty = "10", legend=c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lwd=c(2,2,2), col=c("black","red","blue"))
+
+dev.off() ## Don't forget to close the PNG device!
+
+}
