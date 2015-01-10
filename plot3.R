@@ -9,7 +9,9 @@
 
 plot3 <- function() {
   
-windows()
+  ## Plot 3 on the screen device
+  
+windows()   ## opens the screen device to view the plot on screen
 
 plot(power$dateTime, power$Sub_metering_1, type = "l",                                        
      ylab = "Energy sub metering",
@@ -21,7 +23,7 @@ lines(power$dateTime,power$Sub_metering_2, lwd=2, col="red")
 lines(power$dateTime,power$Sub_metering_3, lwd=2, col="blue")
 legend("topright", bty = "10", legend=c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lwd=c(2,2,2), col=c("black","red","blue"))
 
-## create the plot in a png file
+## create the same plot in a png file
 
 png(filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1/plot3.png", 
     width = 480, height = 480, bg = NA)
@@ -29,8 +31,7 @@ png(filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data
 plot(power$dateTime, power$Sub_metering_1, type = "l",                                        
      ylab = "Energy sub metering",
      xlab = " ", 
-     mar = c(.5, .1, .1, .1),
-     bg = "NA"
+     mar = c(.5, .1, .1, .1)
 )
 lines(power$dateTime,power$Sub_metering_2, lwd=1, col="red")
 lines(power$dateTime,power$Sub_metering_3, lwd=1, col="blue")

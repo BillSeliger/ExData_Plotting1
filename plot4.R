@@ -9,6 +9,8 @@
 
 plot4 <- function() {
   
+  ## Plot 4 on the screen device
+  
 windows()  ## open the screen device
 
 par(mfrow = c(2, 2))  ## set parameters for the 2 x 2 plots

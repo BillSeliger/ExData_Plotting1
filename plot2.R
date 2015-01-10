@@ -9,6 +9,8 @@
 
 plot2 <- function() {
   
+## Plot 2 on the screen device
+  
 windows()    ## opens the screen device to view the plot on screen
 
 plot(power$dateTime, power$Global_active_power, type = "l", 

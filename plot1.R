@@ -20,7 +20,7 @@ hist(power$Global_active_power, xaxt="n",                   ## removes x axis
 )
 axis (side = 1, at = seq(0, 6, by = 2))                     ## x-axis marks even numbers from 0 to 6
 
-## duplicate plot 1 to a png file
+## create plot 1 in a png file
 
 png(filename="C:/Users/rr046302/Documents/Bill's Stuff/Coursera/Exploratory Data Analysis/ExData_Plotting1/plot1.png", 
          width = 480, height = 480, bg = NA)
